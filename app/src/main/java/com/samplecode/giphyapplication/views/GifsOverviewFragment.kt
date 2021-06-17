@@ -38,8 +38,7 @@ class GifsOverviewFragment : Fragment(), GifAdapter.OnItemClickListener {
 
         binding.pullToRefresh.setOnRefreshListener {
             binding.gifList.scrollToPosition(0)
-            val searchView = getView()?.findViewById(R.id.search_action) as SearchView
-            viewModel.searchGifs(searchView.query.toString())
+            viewModel.searchGifs(viewModel.CurrentQuery.value)
 
             binding.pullToRefresh.isRefreshing = false
         }

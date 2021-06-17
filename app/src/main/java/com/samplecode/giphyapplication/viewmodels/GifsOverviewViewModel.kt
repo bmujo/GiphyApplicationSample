@@ -16,6 +16,7 @@ class GifsOverviewViewModel @Inject constructor(private val repository: GifRepos
     public var IsNavigating: Boolean = false
 
     private val currentQuery = state.getLiveData(CURRENT_QUERY, DEFAULT_QUERY)
+    public val CurrentQuery: LiveData<String> get() = currentQuery
 
     val listOfGifs = currentQuery.switchMap { queryString ->
         repository.getSearchResults(queryString).cachedIn(viewModelScope)
