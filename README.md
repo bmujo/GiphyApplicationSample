@@ -1,5 +1,7 @@
 # GiphyApplicationSample
 
+![GitHub Cards Preview](https://github.com/bmujo/GiphyApplicationSample/blob/master/GiphyApplicationImage.jpg)
+
 Giphy Application is a simple project that uses Giphy API to show trending gifs, to search gifs and to show gif details
 
 ## Tech Stack
