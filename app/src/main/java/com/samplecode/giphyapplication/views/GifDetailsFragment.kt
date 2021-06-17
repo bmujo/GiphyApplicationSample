@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -15,6 +16,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.samplecode.giphyapplication.databinding.FragmentGifDetailsBinding
+import com.samplecode.giphyapplication.viewmodels.GifsOverviewViewModel
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -22,6 +24,7 @@ import com.samplecode.giphyapplication.databinding.FragmentGifDetailsBinding
 class GifDetailsFragment : Fragment() {
 
     private var _binding: FragmentGifDetailsBinding? = null
+    private val viewModel: GifsOverviewViewModel by activityViewModels()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -74,6 +77,7 @@ class GifDetailsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        viewModel.IsNavigating = false
         _binding = null
     }
 }

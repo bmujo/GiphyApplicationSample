@@ -38,7 +38,8 @@ class GifsOverviewFragment : Fragment(), GifAdapter.OnItemClickListener {
 
         binding.pullToRefresh.setOnRefreshListener {
             binding.gifList.scrollToPosition(0)
-            viewModel.searchGifs(viewModel.currentQuery.value)
+            val searchView = getView()?.findViewById(R.id.search_action) as SearchView
+            viewModel.searchGifs(searchView.query.toString())
 
             binding.pullToRefresh.isRefreshing = false
         }
@@ -48,15 +49,15 @@ class GifsOverviewFragment : Fragment(), GifAdapter.OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapterTemp = GifAdapter(this)
+        val adapter = GifAdapter(this)
         binding.apply {
             gifList.layoutManager = StaggeredGridLayoutManager(3, LinearLayoutManager.VERTICAL )
-            gifList.adapter = adapterTemp
+            gifList.adapter = adapter
         }
 
         viewModel.listOfGifs.observe(viewLifecycleOwner) {
-            adapterTemp.submitData(viewLifecycleOwner.lifecycle, it)
-            adapterTemp.notifyDataSetChanged()
+            adapter.submitData(viewLifecycleOwner.lifecycle, it)
+            adapter.notifyDataSetChanged()
         }
 
         setHasOptionsMenu(true)
@@ -75,6 +76,8 @@ class GifsOverviewFragment : Fragment(), GifAdapter.OnItemClickListener {
         val coroutineScope = lifecycle.coroutineScope
         var searchJob: Job? = null
 
+        //searchView?.setOnClickListener { searchView?.setQuery(viewModel.currentQuery.value!!, false) }
+
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
 
@@ -92,13 +95,14 @@ class GifsOverviewFragment : Fragment(), GifAdapter.OnItemClickListener {
                     searchJob = coroutineScope.launch {
                         newText?.let {
                             delay(500)
-                            if(newText != null){
+                            if(!viewModel.IsNavigating){
                                 viewModel.searchGifs(newText)
                             }
                         }
                     }
-                }catch (e: Exception){
-
+                }catch (e: Exception)
+                {
+                    val temp = e.message
                 }
 
                 return true
@@ -116,6 +120,9 @@ class GifsOverviewFragment : Fragment(), GifAdapter.OnItemClickListener {
             gif.images.original.url,
             gif.title
         )
+
+        viewModel.IsNavigating = true
+
         findNavController().navigate(action)
     }
 }

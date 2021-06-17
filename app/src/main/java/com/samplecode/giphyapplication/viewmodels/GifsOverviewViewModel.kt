@@ -9,12 +9,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class GifsOverviewViewModel @Inject constructor(private val repository: GifRepository,
-@Assisted state: SavedStateHandle) : ViewModel() {
+class GifsOverviewViewModel @Inject constructor(private val repository: GifRepository, state: SavedStateHandle) : ViewModel() {
     private val mutableGifList = MutableLiveData<List<Gif>>()
     public val GifList: LiveData<List<Gif>> get() = mutableGifList
 
-    public val currentQuery = state.getLiveData(CURRENT_QUERY, DEFAULT_QUERY)
+    public var IsNavigating: Boolean = false
+
+    private val currentQuery = state.getLiveData(CURRENT_QUERY, DEFAULT_QUERY)
 
     val listOfGifs = currentQuery.switchMap { queryString ->
         repository.getSearchResults(queryString).cachedIn(viewModelScope)
